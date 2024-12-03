@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de IMC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: black;
+      color: white;
+    }
+
+    input {
+      margin: 10px;
+      padding: 10px;
+      font-size: 20px;
+      border-radius: 8px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 20px;
+      font-size: 20px;
+      border-radius: 8px;
+      color: white;
+      background-color: #007BFF;
+    }
+    /* Estilo do modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: #2c12c0;
+      margin: 15% auto;
+      padding: 20px;
+      font-size: 20px;
+      border: 1px solid #888;
+      border-radius: 8px;
+      width: 50%;
+      text-align: center;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover, .close:focus {
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de IMC</h1>
+  <form onsubmit="calcularIMC(); return false;">
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" step="0.1" placeholder="Ex: 70" required>
+    <br>
+    <label for="altura">Altura (m):</label>
+    <input type="number" id="altura" step="0.01" placeholder="Ex: 1.75" required>
+    <br>
+    <button type="submit">Calcular IMC</button>
+  </form>
+
+  <!-- Modal -->
+  <div id="resultadoModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="fecharModal()">&times;</span>
+      <p id="resultadoTexto"></p>
+    </div>
+  </div>
+
+  <script>
+    function calcularIMC() {
+      const peso = parseFloat(document.getElementById('peso').value);
+      const altura = parseFloat(document.getElementById('altura').value);
+
+      if (!peso || !altura || altura <= 0) {
+        alert('Por favor, insira valores validos!');
+        return;
+      }
+
+      const imc = (peso / (altura * altura)).toFixed(2);
+      let classificacao = '';
+
+      if (imc < 18.5) {
+        classificacao = 'Abaixo do peso';
+      } else if (imc < 24.9) {
+        classificacao = 'Peso normal';
+      } else if (imc < 29.9) {
+        classificacao = 'Sobrepeso';
+      } else if (imc < 39.9) {
+       classificacao = 'Obesidade';
+      } else { classificacao = 'Obesidade grave';
+    }
+
+
+      const resultadoTexto = `Seu IMC  ${imc} (${classificacao}).`;
+      document.getElementById('resultadoTexto').textContent = resultadoTexto;
+
+      abrirModal();
+    }
+
+    function abrirModal() {
+      document.getElementById('resultadoModal').style.display = 'block';
+    }
+
+    function fecharModal() {
+      document.getElementById('resultadoModal').style.display = 'none';
+    }
+
+    // Fecha o modal ao clicar fora da janela
+    window.onclick = function(event) {
+      const modal = document.getElementById('resultadoModal');
+      if (event.target === modal) {
+        fecharModal();
+      }
+    }
+  </script>
+</body>
+</html>
